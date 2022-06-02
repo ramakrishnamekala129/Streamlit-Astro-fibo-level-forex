@@ -454,7 +454,7 @@ if gann:
             df1=df1.reset_index()
             df1=df1.iloc[:,1:]
     df1=df1.div(Divide)
-    st.dataframe(df1,formatter="{:.6f}")
+    st.dataframe(df1.style.format("{:.6%}"))
 
 	
     
