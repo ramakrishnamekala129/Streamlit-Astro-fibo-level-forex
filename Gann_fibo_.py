@@ -406,8 +406,8 @@ if varcurrentfibomonth:
     st.text('Custom Months Open Price for Calculation is '+str(float(todaypricew/Divide)))
 
 if gann:
-	t=j['Open']
-	todayprice=t[-1]
+	t=j
+	todayprice=t['Open'][-1]
 	takeinput = st.number_input(label="Input Price For Astro",step=1.,format="%.6f")
 	takeinput=takeinput*Divide
 	selectbox=st.selectbox('Select Planet Aspects',('Jupiter/Kethu','Mercury/Mars','Rahu/Saturn','Moon/Venus'))
