@@ -433,7 +433,7 @@ if gann:
 	df1=df
 	takeinput1=takeinput
 	if takeinput ==0:
-		takeinput1=todayprice
+		takeinput1=todayprice_12
 	if takeinput1 !=0:
 		if selectbox == 'Jupiter/Kethu':
 		    #df=pd.read_csv('jupiter_kethu.csv')
