@@ -406,59 +406,62 @@ if varcurrentfibomonth:
     st.text('Custom Months Open Price for Calculation is '+str(float(todaypricew/Divide)))
 
 if gann:
-    takeinput = st.number_input(label="Input Price For Astro",step=1.,format="%.6f")
-    takeinput=takeinput*Divide
-    selectbox=st.selectbox('Select Planet Aspects',('Jupiter/Kethu','Mercury/Mars','Rahu/Saturn','Moon/Venus'))
-    if selectbox == 'Jupiter/Kethu':
-        df=pd.read_csv('jupiter_kethu.csv')
-        df=df.dropna()
-        df=df.astype(int)
-    elif selectbox == 'Mercury/Mars':
-        
-        df=pd.read_csv('mercury_mars.csv')
-        df=df.dropna()
-        df=df.astype(int)
-    elif selectbox == 'Rahu/Saturn':
-        df=pd.read_csv('rahu_saturn.csv')
-        df=df.dropna()
-        df=df.astype(int)
-    elif selectbox == 'Moon/Venus':
-        df=pd.read_csv('moon_venus.csv')
-        df=df.dropna()
-        df=df.astype(int)
-    df=df.iloc[:,1:]
-    df1=df
-    if takeinput > 1:
-        if selectbox == 'Jupiter/Kethu':
-            #df=pd.read_csv('jupiter_kethu.csv')
-            df_sort = df.iloc[(df['Sell_315']-takeinput).abs().argsort()[:5]]
-            df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
-            df1=df1.reset_index()
-            df1=df1.iloc[:,1:]
-        elif selectbox == 'Mercury/Mars':
-            #df=pd.read_csv('mercury_mars.csv')
-            df_sort = df.iloc[(df['Buy_90']-takeinput).abs().argsort()[:5]]
-            df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
-            df1=df1.reset_index()
-            df1=df1.iloc[:,1:]
-        elif selectbox == 'Rahu/Saturn':
-            #df=pd.read_csv('rahu_saturn.csv')
-            df_sort = df.iloc[(df['Buy_45']-takeinput).abs().argsort()[:5]]
-            df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
-            df1=df1.reset_index()
-            df1=df1.iloc[:,1:]
-        elif selectbox == 'Moon/Venus':
-            #df=pd.read_csv('moon_venus.csv')
-            df_sort = df.iloc[(df['Buy_315']-takeinput).abs().argsort()[:5]]
-            df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
-            df1=df1.reset_index()
-            df1=df1.iloc[:,1:]
-    df1=df1.div(Divide)
-    if Divide == 1 :
+	t=t['Open']
+	todayprice=t[-1]
+	takeinput = st.number_input(label="Input Price For Astro",step=1.,format="%.6f")
+	takeinput=takeinput*Divide
+	selectbox=st.selectbox('Select Planet Aspects',('Jupiter/Kethu','Mercury/Mars','Rahu/Saturn','Moon/Venus'))
+	if selectbox == 'Jupiter/Kethu':
+		df=pd.read_csv('jupiter_kethu.csv')
+		df=df.dropna()
+		df=df.astype(int)
+	elif selectbox == 'Mercury/Mars':
+
+		df=pd.read_csv('mercury_mars.csv')
+		df=df.dropna()
+		df=df.astype(int)
+	elif selectbox == 'Rahu/Saturn':
+		df=pd.read_csv('rahu_saturn.csv')
+		df=df.dropna()
+		df=df.astype(int)
+	elif selectbox == 'Moon/Venus':
+		df=pd.read_csv('moon_venus.csv')
+		df=df.dropna()
+		df=df.astype(int)
+	df=df.iloc[:,1:]
+	df1=df
+	takeinput1=takeinput
+	if takeinput ==0:
+		takeinput1=todayprice
+	if takeinput1 !=0:
+		if selectbox == 'Jupiter/Kethu':
+		    #df=pd.read_csv('jupiter_kethu.csv')
+		    df_sort = df.iloc[(df['Sell_315']-takeinput1).abs().argsort()[:5]]
+		    df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
+		    df1=df1.reset_index()
+		    df1=df1.iloc[:,1:]
+		elif selectbox == 'Mercury/Mars':
+		    #df=pd.read_csv('mercury_mars.csv')
+		    df_sort = df.iloc[(df['Buy_90']-takeinput1).abs().argsort()[:5]]
+		    df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
+		    df1=df1.reset_index()
+		    df1=df1.iloc[:,1:]
+		elif selectbox == 'Rahu/Saturn':
+		    #df=pd.read_csv('rahu_saturn.csv')
+		    df_sort = df.iloc[(df['Buy_45']-takeinput1).abs().argsort()[:5]]
+		    df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
+		    df1=df1.reset_index()
+		    df1=df1.iloc[:,1:]
+		elif selectbox == 'Moon/Venus':
+		    #df=pd.read_csv('moon_venus.csv')
+		    df_sort = df.iloc[(df['Buy_315']-takeinput1).abs().argsort()[:5]]
+		    df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
+		    df1=df1.reset_index()
+		    df1=df1.iloc[:,1:]
+	df1=df1.div(Divide)
+	if Divide ==1:
 		st.dataframe(df1.style.format("{:.2f}"))
-	elif Divide == 1000 :
+	elif Divide ==1000:
 		st.dataframe(df1.style.format("{:.3f}"))
-	elif Divide == 10000 :
+	elif Divide ==10000:
 		st.dataframe(df1.style.format("{:.5f}"))
-	else:
-		st.dataframe(df1.style.format("{:.2f}"))
