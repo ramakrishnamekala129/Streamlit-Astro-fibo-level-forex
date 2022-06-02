@@ -452,7 +452,7 @@ if gann:
             df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
             df1=df1.reset_index()
             df1=df1.iloc[:,1:]
-    df1=df1.div(Divde)
+    df1=df1.div(Divide)
     st.dataframe(df1)
 
 	
