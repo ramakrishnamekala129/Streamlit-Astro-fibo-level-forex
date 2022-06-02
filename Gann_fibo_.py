@@ -406,7 +406,7 @@ if varcurrentfibomonth:
     st.text('Custom Months Open Price for Calculation is '+str(float(todaypricew/Divide)))
 
 if gann:
-	t=t['Open']
+	t=j['Open']
 	todayprice=t[-1]
 	takeinput = st.number_input(label="Input Price For Astro",step=1.,format="%.6f")
 	takeinput=takeinput*Divide
