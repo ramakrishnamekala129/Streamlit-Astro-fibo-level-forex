@@ -406,7 +406,7 @@ if varcurrentfibomonth:
     st.text('Custom Months Open Price for Calculation is '+str(float(todaypricew/Divide)))
 
 if gann:
-    takeinput = st.number_input(label="Input Price For Astro",step=1.,format="%.2f")
+    takeinput = st.number_input(label="Input Price For Astro",step=1.,format="%.6f")
     selectbox=st.selectbox('Select Planet Aspects',('Jupiter/Kethu','Mercury/Mars','Rahu/Saturn','Moon/Venus'))
     if selectbox == 'Jupiter/Kethu':
         df=pd.read_csv('jupiter_kethu.csv')
