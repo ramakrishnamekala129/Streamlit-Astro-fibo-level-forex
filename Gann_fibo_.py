@@ -454,8 +454,7 @@ if gann:
             df1=df1.reset_index()
             df1=df1.iloc[:,1:]
     df1=df1.div(Divide)
-    length='{:.{}f}'.format(len(str(Divide)))
-    st.dataframe(df1.style.format(length))
+    st.dataframe(df1.style.format('{:.{}f}'.format(len(str(Divide)))))
 
 	
     
