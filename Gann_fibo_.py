@@ -408,7 +408,7 @@ if varcurrentfibomonth:
 if gann:
 	t=j
 	todayprice_12=list(t['Open'])[-1]
-	print('astro today price {todayprice_12}')
+	print('astro today price {}'.format(todayprice_12))
 	takeinput = st.number_input(label="Input Price For Astro",step=1.,format="%.6f")
 	takeinput=takeinput*Divide
 	selectbox=st.selectbox('Select Planet Aspects',('Jupiter/Kethu','Mercury/Mars','Rahu/Saturn','Moon/Venus'))
@@ -433,7 +433,7 @@ if gann:
 	df1=df
 	takeinput1=takeinput
 	if takeinput ==0:
-		takeinput1=todayprice_12
+		takeinput1=todayprice_12*Divide
 	if takeinput1 !=0:
 		if selectbox == 'Jupiter/Kethu':
 		    #df=pd.read_csv('jupiter_kethu.csv')
