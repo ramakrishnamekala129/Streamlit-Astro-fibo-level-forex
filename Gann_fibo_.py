@@ -454,11 +454,11 @@ if gann:
             df1=df1.reset_index()
             df1=df1.iloc[:,1:]
     df1=df1.div(Divide)
-    if Divide == 1 :
-    	st.dataframe(df1.style.format("{:.2f}"))
-    elif Divide == 1000 :
-    	st.dataframe(df1.style.format("{:.3f}"))
+	if Divide == 1 :
+		st.dataframe(df1.style.format("{:.2f}"))
+	elif Divide == 1000 :
+		st.dataframe(df1.style.format("{:.3f}"))
 	elif Divide == 10000 :
-    	st.dataframe(df1.style.format("{:.5f}"))
-    else:
-    	st.dataframe(df1.style.format("{:.2f}"))
+		st.dataframe(df1.style.format("{:.5f}"))
+	else:
+		st.dataframe(df1.style.format("{:.2f}"))
