@@ -26,7 +26,7 @@ def CurrencyDivider(select):
     elif 'XAU/USD' in select:
     	return 100
     elif 'USD' in select:
-        return 10000
+        return 100000
 
     else:
     	return 1
