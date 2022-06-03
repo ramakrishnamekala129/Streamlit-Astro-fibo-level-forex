@@ -464,5 +464,5 @@ if gann:
 		st.dataframe(df1.style.format("{:.2f}"))
 	elif Divide ==1000:
 		st.dataframe(df1.style.format("{:.3f}"))
-	elif Divide ==10000:
+	elif Divide ==100000:
 		st.dataframe(df1.style.format("{:.5f}"))
