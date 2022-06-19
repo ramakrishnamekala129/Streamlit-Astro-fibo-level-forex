@@ -26,7 +26,7 @@ def CurrencyDivider(select):
     elif 'XAU/USD' in select:
     	return 100
     elif 'USD' in select:
-        return 100000
+        return 10000
 
     else:
     	return 1
@@ -47,6 +47,8 @@ varcurrentfiboweek = st.sidebar.checkbox('Custom Weeks')
 varcurrentfibomonth = st.sidebar.checkbox('Custom Months')
 
 gann = st.sidebar.checkbox('Astro Levels')
+fullgann = st.sidebar.checkbox('Complete Astro Levels')
+closeprices=st.sidebar.checkbox('Close Price')
 
 if (status == 'Investing.com'):
 	d = st.date_input("Todays Date",date.today())
@@ -406,65 +408,97 @@ if varcurrentfibomonth:
     st.text('Custom Months Open Price for Calculation is '+str(float(todaypricew/Divide)))
 
 if gann:
-	t=j
-	todayprice_12=list(t['Open'])[-1]
-	print('astro today price {}'.format(todayprice_12))
-	takeinput = st.number_input(label="Input Price For Astro",step=1.,format="%.6f")
-	takeinput=takeinput*Divide
-	selectbox=st.selectbox('Select Planet Aspects',('Jupiter/Kethu','Mercury/Mars','Rahu/Saturn','Moon/Venus'))
-	if selectbox == 'Jupiter/Kethu':
-		df=pd.read_csv('jupiter_kethu.csv')
-		df=df.dropna()
-		df=df.astype(int)
-	elif selectbox == 'Mercury/Mars':
+    takeinput = st.number_input(label="Input Price For Astro",step=1.,format="%.6f")
+    selectbox=st.selectbox('Select Planet Aspects',('Jupiter/Kethu','Mercury/Mars','Rahu/Saturn','Moon/Venus'))
+    if selectbox == 'Jupiter/Kethu':
+        df=pd.read_csv('jupiter_kethu.csv')
+        df=df.dropna()
+        df=df.astype(int)
+    elif selectbox == 'Mercury/Mars':
+        
+        df=pd.read_csv('mercury_mars.csv')
+        df=df.dropna()
+        df=df.astype(int)
+    elif selectbox == 'Rahu/Saturn':
+        df=pd.read_csv('rahu_saturn.csv')
+        df=df.dropna()
+        df=df.astype(int)
+    elif selectbox == 'Moon/Venus':
+        df=pd.read_csv('moon_venus.csv')
+        df=df.dropna()
+        df=df.astype(int)
+    df=df.iloc[:,1:]
+    df1=df
+    if takeinput > 1:
+        if selectbox == 'Jupiter/Kethu':
+            #df=pd.read_csv('jupiter_kethu.csv')
+            df_sort = df.iloc[(df['Sell_315']-takeinput).abs().argsort()[:5]]
+            df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
+            df1=df1.reset_index()
+            df1=df1.iloc[:,1:]
+        elif selectbox == 'Mercury/Mars':
+            #df=pd.read_csv('mercury_mars.csv')
+            df_sort = df.iloc[(df['Buy_90']-takeinput).abs().argsort()[:5]]
+            df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
+            df1=df1.reset_index()
+            df1=df1.iloc[:,1:]
+        elif selectbox == 'Rahu/Saturn':
+            #df=pd.read_csv('rahu_saturn.csv')
+            df_sort = df.iloc[(df['Buy_45']-takeinput).abs().argsort()[:5]]
+            df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
+            df1=df1.reset_index()
+            df1=df1.iloc[:,1:]
+        elif selectbox == 'Moon/Venus':
+            #df=pd.read_csv('moon_venus.csv')
+            df_sort = df.iloc[(df['Buy_315']-takeinput).abs().argsort()[:5]]
+            df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
+            df1=df1.reset_index()
+            df1=df1.iloc[:,1:]
+        df1=df1.Divide(Divde)
+    st.dataframe(df1)
 
-		df=pd.read_csv('mercury_mars.csv')
-		df=df.dropna()
-		df=df.astype(int)
-	elif selectbox == 'Rahu/Saturn':
-		df=pd.read_csv('rahu_saturn.csv')
-		df=df.dropna()
-		df=df.astype(int)
-	elif selectbox == 'Moon/Venus':
-		df=pd.read_csv('moon_venus.csv')
-		df=df.dropna()
-		df=df.astype(int)
-	df=df.iloc[:,1:]
-	df1=df
-	takeinput1=takeinput
-	if takeinput ==0:
-		takeinput1=todayprice_12*Divide
-	if takeinput1 !=0:
-		if selectbox == 'Jupiter/Kethu':
-		    #df=pd.read_csv('jupiter_kethu.csv')
-		    df_sort = df.iloc[(df['Sell_315']-takeinput1).abs().argsort()[:5]]
-		    df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
-		    df1=df1.reset_index()
-		    df1=df1.iloc[:,1:]
-		elif selectbox == 'Mercury/Mars':
-		    #df=pd.read_csv('mercury_mars.csv')
-		    df_sort = df.iloc[(df['Buy_90']-takeinput1).abs().argsort()[:5]]
-		    df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
-		    df1=df1.reset_index()
-		    df1=df1.iloc[:,1:]
-		elif selectbox == 'Rahu/Saturn':
-		    #df=pd.read_csv('rahu_saturn.csv')
-		    df_sort = df.iloc[(df['Buy_45']-takeinput1).abs().argsort()[:5]]
-		    df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
-		    df1=df1.reset_index()
-		    df1=df1.iloc[:,1:]
-		elif selectbox == 'Moon/Venus':
-		    #df=pd.read_csv('moon_venus.csv')
-		    df_sort = df.iloc[(df['Buy_315']-takeinput1).abs().argsort()[:5]]
-		    df1=df_sort.sort_index(axis=0, level=None, ascending=True, inplace=False, kind='quicksort', na_position='last', sort_remaining=True)
-		    df1=df1.reset_index()
-		    df1=df1.iloc[:,1:]
-	df1=df1.div(Divide)
-	if Divide ==1:
-		st.dataframe(df1.style.format("{:.2f}"))
-	elif Divide ==100:
-		st.dataframe(df1.style.format("{:.2f}"))
-	elif Divide ==1000:
-		st.dataframe(df1.style.format("{:.3f}"))
-	elif Divide ==100000:
-		st.dataframe(df1.style.format("{:.5f}"))
+
+if fullgann:
+    selectbox=st.selectbox('Select Planet Aspects',('Jupiter/Kethu','Mercury/Mars','Rahu/Saturn','Moon/Venus'))
+    if selectbox == 'Jupiter/Kethu':
+        df=pd.read_csv('jupiter_kethu.csv')
+        df=df.dropna()
+        df=df.astype(int)
+    elif selectbox == 'Mercury/Mars':
+        
+        df=pd.read_csv('mercury_mars.csv')
+        df=df.dropna()
+        df=df.astype(int)
+    elif selectbox == 'Rahu/Saturn':
+        df=pd.read_csv('rahu_saturn.csv')
+        df=df.dropna()
+        df=df.astype(int)
+    elif selectbox == 'Moon/Venus':
+        df=pd.read_csv('moon_venus.csv')
+        df=df.dropna()
+        df=df.astype(int)
+    df=df.iloc[:,1:]
+    df1=df
+    
+    st.dataframe(df1)
+	
+if closeprices:
+	if (status == 'Investing.com'):
+		d = st.date_input("Todays Date",date.today())
+		todate=d-timedelta(days=10)
+		todate=st.date_input('From Date',todate)
+		todate=todate.strftime('%d/%m/%Y')
+		d=d.strftime('%d/%m/%Y')
+		if (select=='Nifty 50') or (select=='Nifty Bank'):
+			t = investpy.get_index_historical_data(index=select,
+	                                country="India", from_date=str(todate), to_date=str(d))
+		elif select in pairs1:
+			t=investpy.get_currency_cross_historical_data(currency_cross=select, from_date=str(todate), to_date=str(d))
+		else:
+			t=investpy.get_stock_historical_data(stock=select,country='India',
+	                                        from_date=str(todate),
+	                                        to_date=str(d))
+		t=t.reset_index()
+		t=t[['Date','Close']]
+		st.table(t)
+	    
