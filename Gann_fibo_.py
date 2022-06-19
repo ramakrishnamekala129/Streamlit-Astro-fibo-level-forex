@@ -484,7 +484,7 @@ if fullgann:
 	
 if closeprices:
 	if (status == 'Investing.com'):
-		d = st.date_input("Todays Date",date.today())
+		d = st.date_input("To Date",date.today())
 		todate=d-timedelta(days=10)
 		todate=st.date_input('From Date',todate)
 		todate=todate.strftime('%d/%m/%Y')
