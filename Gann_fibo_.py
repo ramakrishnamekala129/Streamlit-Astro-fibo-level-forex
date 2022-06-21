@@ -509,6 +509,6 @@ if closeprices:
 	                                        from_date=str(todate),
 	                                        to_date=str(d))
 		t=t.reset_index()
-		t=t[['Date','Close']]
+		#t=t[['Date','Close']]
 		st.table(t)
 	    
