@@ -26,11 +26,9 @@ def CurrencyDivider(select):
     elif 'XAU/USD' in select:
     	return 100
     elif 'USD' in select:
-        return 10000
-
+        return 100000
     else:
     	return 1
-
 
 
 status = st.sidebar.radio("Select Source: ", ('Investing.com', 'yahoo Finance','FXCM'))
@@ -413,14 +411,12 @@ if gann:
 	print('astro today price {}'.format(todayprice_12))
 	takeinput = st.number_input(label="Input Price For Astro",step=1.,format="%.6f")
 	takeinput=takeinput*Divide
-	print(takeinput)
 	selectbox=st.selectbox('Select Planet Aspects',('Jupiter/Kethu','Mercury/Mars','Rahu/Saturn','Moon/Venus'))
 	if selectbox == 'Jupiter/Kethu':
 		df=pd.read_csv('jupiter_kethu.csv')
 		df=df.dropna()
 		df=df.astype(int)
 	elif selectbox == 'Mercury/Mars':
-
 		df=pd.read_csv('mercury_mars.csv')
 		df=df.dropna()
 		df=df.astype(int)
@@ -437,7 +433,6 @@ if gann:
 	takeinput1=takeinput
 	if takeinput ==0:
 		takeinput1=todayprice_12*Divide
-		print(takeinput1)
 	if takeinput1 !=0:
 		if selectbox == 'Jupiter/Kethu':
 		    #df=pd.read_csv('jupiter_kethu.csv')
@@ -472,7 +467,6 @@ if gann:
 		st.dataframe(df1.style.format("{:.3f}"))
 	elif Divide ==100000:
 		st.dataframe(df1.style.format("{:.5f}"))
-
 
 if fullgann:
     selectbox=st.selectbox('Select Planet Aspects Full Sheet',('Jupiter/Kethu','Mercury/Mars','Rahu/Saturn','Moon/Venus'))
