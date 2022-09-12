@@ -27,6 +27,8 @@ def CurrencyDivider(select):
     	return 100
     elif 'USD' in select:
         return 100000
+    elif 'INR' in select:
+        return 10000
     else:
     	return 1
 
