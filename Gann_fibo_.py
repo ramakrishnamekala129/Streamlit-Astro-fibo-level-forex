@@ -15,7 +15,7 @@ import numpy as np
 
 
 pairs1=investpy.currency_crosses.get_currency_crosses_list()
-pairs=['NSEBANK','Nifty 50','Nifty Bank','HDFC','HDBK','ICBK','TCS','SBI','RELI','ITC','KTKM','LART','AXBK','HLL','INFY','EUR/USD']
+pairs=['TCS.NS','NSEBANK','Nifty 50','Nifty Bank','HDFC','HDBK','ICBK','TCS','SBI','RELI','ITC','KTKM','LART','AXBK','HLL','INFY','EUR/USD']
 pairs.extend(pairs1)#st.title("Share Price analysis for May 2019 to May 2020:")
 st.sidebar.title("Fibo Level Maker")
 #st.markdown("This application is a Share Price dashboard for Top 5 Gainers and Losers:")
