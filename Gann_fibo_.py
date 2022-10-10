@@ -184,7 +184,7 @@ select=1
 #st.sidebar.title("Pairs")
 #select = st.sidebar.selectbox('Select a Pair', pairs, key='1')
 #currency = st.sidebar.checkbox('Currency')
-st.json(response.json())
+#st.json(response.json())
 
 
 print(pd.DataFrame(nextlvl).T)
