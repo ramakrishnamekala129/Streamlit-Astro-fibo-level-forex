@@ -4,3 +4,4 @@ investpy
 streamlit
 yfinance
 investiny
+plotly
