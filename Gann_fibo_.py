@@ -123,7 +123,7 @@ else:
 print(atmstrike)
 strikelvl=[]
 nextlvl={}
-for i in range(0,11):
+for i in range(0,int(m)):
     strikelvl.append(atmstrike + (i*100))
     strikelvl.append(atmstrike - (i*100))
 
