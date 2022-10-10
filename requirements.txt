@@ -3,3 +3,4 @@ numpy
 investpy
 streamlit
 yfinance
+investiny
