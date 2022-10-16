@@ -111,7 +111,7 @@ def chaindata(expiry):
 	# response = requests.get('https://api.stocksrin.com/srOptionChain/chain?symbol=BankNifty&expiry=2022-10-27&lastTimeStamp=07-Oct-22%2015:31:39&forcedDataLoad=true', headers=headers)
 	k=response
 	return k
-st_autorefresh(interval=10*1000, key="dataframerefresh")
+st_autorefresh(interval=30*1000, key="dataframerefresh")
 k=response.json()
 indexltp=k['srIndexQuote']['openValue']
 mod=int(indexltp)%50
