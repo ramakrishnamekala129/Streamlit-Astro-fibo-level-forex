@@ -12,7 +12,7 @@ import pandas as pd
 from datetime import datetime, timedelta,date
 import investpy
 import numpy as np
-
+from streamlit_autorefresh import st_autorefresh
 from investiny import historical_data, search_assets
 
 m=st.sidebar.text_input('Option Range',value=5)
@@ -111,7 +111,7 @@ def chaindata(expiry):
 	# response = requests.get('https://api.stocksrin.com/srOptionChain/chain?symbol=BankNifty&expiry=2022-10-27&lastTimeStamp=07-Oct-22%2015:31:39&forcedDataLoad=true', headers=headers)
 	k=response
 	return k
-
+st_autorefresh(interval=1000, key="dataframerefresh")
 k=response.json()
 indexltp=k['srIndexQuote']['openValue']
 mod=int(indexltp)%50
