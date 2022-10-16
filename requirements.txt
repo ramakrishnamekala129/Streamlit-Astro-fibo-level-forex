@@ -1,7 +1,7 @@
 pandas
 numpy
 investpy
-streamlit
+streamlit-nightly
 yfinance
 investiny
 plotly
