@@ -5,3 +5,4 @@ streamlit-nightly
 yfinance
 investiny
 plotly
+streamlit-autorefresh
