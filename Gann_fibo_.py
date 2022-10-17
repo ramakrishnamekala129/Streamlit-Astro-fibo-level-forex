@@ -12,73 +12,12 @@ import pandas as pd
 from datetime import datetime, timedelta,date
 import investpy
 import numpy as np
-from streamlit_autorefresh import st_autorefresh
+
 from investiny import historical_data, search_assets
+from streamlit_autorefresh import st_autorefresh
 
 m=st.sidebar.text_input('Option Range',value=5)
-
-import requests
-
-headers = {
-
-    'authority': 'api.stocksrin.com',
-    'accept': 'application/json, text/plain, */*',
-    'accept-language': 'en-US,en;q=0.9',
-    'origin': 'https://www.stocksrin.com',
-    'referer': 'https://www.stocksrin.com/',
-    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="104", "Opera GX";v="90"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"Windows"',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'same-site',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.100',
-}
-
-params = (
-    ('symbol', 'BankNifty'),
-    ('expiry', '2022-10-20'),
-    ('lastTimeStamp', ''),
-    ('forcedDataLoad', 'true'),
-)
-
-response = requests.get('https://api.stocksrin.com/srOptionChain/chain', headers=headers, params=params)
-
-import requests
-
-headers = {
-    'authority': 'api.stocksrin.com',
-    'accept': 'application/json, text/plain, */*',
-    'accept-language': 'en-US,en;q=0.9',
-    'origin': 'https://www.stocksrin.com',
-    'referer': 'https://www.stocksrin.com/',
-    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="104", "Opera GX";v="90"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"Windows"',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'same-site',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.100',
-}
-
-params = (
-    ('symbol', 'BankNifty'),
-)
-
-r = requests.get('https://api.stocksrin.com/srOptionChain/expiry', headers=headers, params=params)
-
-#NB. Original query string below. It seems impossible to parse and
-#reproduce query strings 100% accurately so the one below is given
-#in case the reproduced version is not "correct".
-# response = requests.get('https://api.stocksrin.com/srOptionChain/expiry?symbol=BankNifty', headers=headers)
-
-
-
-r=r.json()
-
-
-
-def chaindata(expiry):
+def optionchainbnf(symbol,expiry):
 	import requests
 
 	headers = {
@@ -97,7 +36,196 @@ def chaindata(expiry):
 	}
 
 	params = (
-	    ('symbol', 'BankNifty'),
+	    ('symbol', symbol),
+	    ('expiry', expiry),
+	    ('lastTimeStamp', ''),
+	    ('forcedDataLoad', 'true'),
+	)
+
+	response = requests.get('https://api.stocksrin.com/srOptionChain/chain', headers=headers, params=params)
+	return response.json()
+def expirybnf(symbol):
+	import requests
+
+	headers = {
+	    'authority': 'api.stocksrin.com',
+	    'accept': 'application/json, text/plain, */*',
+	    'accept-language': 'en-US,en;q=0.9',
+	    'origin': 'https://www.stocksrin.com',
+	    'referer': 'https://www.stocksrin.com/',
+	    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="104", "Opera GX";v="90"',
+	    'sec-ch-ua-mobile': '?0',
+	    'sec-ch-ua-platform': '"Windows"',
+	    'sec-fetch-dest': 'empty',
+	    'sec-fetch-mode': 'cors',
+	    'sec-fetch-site': 'same-site',
+	    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.100',
+	}
+
+	params = (
+	    ('symbol', symbol),
+	)
+
+	r = requests.get('https://api.stocksrin.com/srOptionChain/expiry', headers=headers, params=params)
+
+	#NB. Original query string below. It seems impossible to parse and
+	#reproduce query strings 100% accurately so the one below is given
+	#in case the reproduced version is not "correct".
+	# response = requests.get('https://api.stocksrin.com/srOptionChain/expiry?symbol=BankNifty', headers=headers)
+
+
+
+	r=r.json()
+	return r
+
+
+
+#usdinr epiry
+def usdinr(m):
+    import requests
+    
+    headers = {
+        'authority': 'api.stocksrin.com',
+        'accept': 'application/json, text/plain, */*',
+        'accept-language': 'en-US,en;q=0.9',
+        'origin': 'https://www.stocksrin.com',
+        'referer': 'https://www.stocksrin.com/',
+        'sec-ch-ua': '"Not-A.Brand";v="99", "Opera GX";v="91", "Chromium";v="105"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-site',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 OPR/91.0.4516.72',
+    }
+    
+    response = requests.get('https://api.stocksrin.com/currency/liveData/expiry', headers=headers)
+    k=response.json()
+    allof=[]
+    
+    for i in k:
+        import requests
+        
+        headers = {
+            'authority': 'api.stocksrin.com',
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'en-US,en;q=0.9',
+            'origin': 'https://www.stocksrin.com',
+            'referer': 'https://www.stocksrin.com/',
+            'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="104", "Opera GX";v="90"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.100',
+        }
+        
+        params = {
+            'symbol': 'USDINR',
+            'expiry': i,
+        }
+        
+        response = requests.get('https://api.stocksrin.com/currency/liveData/optionModel', params=params, headers=headers)
+        #print(i)
+        for j in response.json()['datums']:
+            #print(j['strikePrice'])
+            allof.append(j['strikePrice'])
+        #print(i)
+    allof=list(set(allof))
+    allr={}
+    for a in allof:
+        allr[str(a)]={
+            'CE':0,
+            'PE':0,
+            'CE_Change':0,
+            'PE_Change':0
+            
+            }
+    
+    for i in k:
+        import requests
+        
+        headers = {
+            'authority': 'api.stocksrin.com',
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'en-US,en;q=0.9',
+            'origin': 'https://www.stocksrin.com',
+            'referer': 'https://www.stocksrin.com/',
+            'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="104", "Opera GX";v="90"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.100',
+        }
+        
+        params = {
+            'symbol': 'USDINR',
+            'expiry': i,
+        }
+        
+        response = requests.get('https://api.stocksrin.com/currency/liveData/optionModel', params=params, headers=headers)
+        #print(i)
+        for j in response.json()['datums']:
+            if j['strikePrice'] in allof:
+                #print(j.keys())
+                if 'CE' in list(j.keys()):
+                    #print(j['CE']['openInterest'])
+                    #print(j['CE']['changeinOpenInterest'])
+                    allr['{}'.format(j['strikePrice'])]['CE']=(allr['{}'.format(j['strikePrice'])]['CE']) +j['CE']['openInterest']
+                    allr['{}'.format(j['strikePrice'])]['CE_Change']=(allr['{}'.format(j['strikePrice'])]['CE_Change']) +j['CE']['changeinOpenInterest']
+                if 'PE' in list(j.keys()):
+                    #print(j['PE']['openInterest'])
+                    #print(j['PE']['changeinOpenInterest'])
+                    allr['{}'.format(j['strikePrice'])]['PE']=(allr['{}'.format(j['strikePrice'])]['PE']) +j['PE']['openInterest']
+                    allr['{}'.format(j['strikePrice'])]['CE_Change']=(allr['{}'.format(j['strikePrice'])]['PE_Change']) +j['PE']['changeinOpenInterest']
+        
+        #print()
+        #break
+        import math
+        indexltp=(response.json()['underlyingValue'])*1000           
+        mod=int(indexltp*100)%250
+        #print(mod)
+        if mod <25:
+            atmstrike = int(math.floor(indexltp/250))*250/1000
+        else:
+            atmstrike = int(math.ceil(indexltp/250))*250/1000
+        #print(atmstrike)
+        allrl={}
+        alk=[]
+        for i in range(0,int(m)):
+            alk.append(atmstrike+(i*.25))
+            alk.append(atmstrike-(i*.25))
+            #allrl[str(atmstrike+(i*.25))]=allr[str(atmstrike+(i*.25))]
+            #allrl[str(atmstrike-(i*.25))]=allr[str(atmstrike-(i*.25))]]
+        alk.sort()
+        for i in alk:
+            allrl[str(i)]=allr[str(i)]
+        return allrl
+
+
+def chaindata(symbol,expiry):
+	import requests
+
+	headers = {
+	    'authority': 'api.stocksrin.com',
+	    'accept': 'application/json, text/plain, */*',
+	    'accept-language': 'en-US,en;q=0.9',
+	    'origin': 'https://www.stocksrin.com',
+	    'referer': 'https://www.stocksrin.com/',
+	    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="104", "Opera GX";v="90"',
+	    'sec-ch-ua-mobile': '?0',
+	    'sec-ch-ua-platform': '"Windows"',
+	    'sec-fetch-dest': 'empty',
+	    'sec-fetch-mode': 'cors',
+	    'sec-fetch-site': 'same-site',
+	    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.100',
+	}
+
+	params = (
+	    ('symbol', symbol),
 	    ('expiry', expiry),
 	    #('lastTimeStamp', '07-Oct-22 15:31:39'),
 	    ('forcedDataLoad', 'true'),
@@ -111,59 +239,70 @@ def chaindata(expiry):
 	# response = requests.get('https://api.stocksrin.com/srOptionChain/chain?symbol=BankNifty&expiry=2022-10-27&lastTimeStamp=07-Oct-22%2015:31:39&forcedDataLoad=true', headers=headers)
 	k=response
 	return k
-st_autorefresh(interval=30*1000, key="dataframerefresh")
-k=response.json()
-indexltp=k['srIndexQuote']['openValue']
-mod=int(indexltp)%50
-if mod <25:
-    atmstrike = int(math.floor(indexltp/100))*100
-else:
-    atmstrike = int(math.ceil(indexltp/100))*100
-#print(math.floor(k['srIndexQuote']['openValue']))
-print(atmstrike)
-strikelvl=[]
-nextlvl={}
-for i in range(0,int(m)):
-    strikelvl.append(atmstrike + (i*100))
-    strikelvl.append(atmstrike - (i*100))
+def totaloi_bnf(symbol):
+	global m
+	r=expirybnf(symbol)
+	k=(optionchainbnf(symbol,r[2]))#.json()
+	indexltp=k['srIndexQuote']['openValue']
+	mod=int(indexltp)%50
+	if mod <25:
+	    atmstrike = int(math.floor(indexltp/100))*100
+	else:
+	    atmstrike = int(math.ceil(indexltp/100))*100
+	#print(math.floor(k['srIndexQuote']['openValue']))
+	#print(atmstrike)
+	strikelvl=[]
+	nextlvl={}
+	for i in range(0,int(m)):
+	    strikelvl.append(atmstrike + (i*100))
+	    strikelvl.append(atmstrike - (i*100))
+	strikelvl.append(atmstrike)
+	print('strikelvl')
+	print(strikelvl)
 
 
-for i in k['strikeDataModel']['strikes']:
-    print()
-    if i['strikePrice'] in strikelvl:
-        nextlvl[str(i['strikePrice'])]={'CE':0,
-        'PE':0,
-        'CE_change':0,'PE_change':0}
+	for i in k['strikeDataModel']['strikes']:
+	    #print(i)
+	    if i['strikePrice'] in strikelvl:
+	        nextlvl[str(i['strikePrice'])]={'CE':0,
+	        'PE':0,
+	        'CE_change':0,'PE_change':0}
+	    #print(nextlvl)
 
 
-for expiry in r:
+	for expiry in r:
 
-	k=chaindata(expiry)
-	print(expiry)
-	if k.status_code==200:
-		print(k)
-		k=k.json()
-		for i in k['strikeDataModel']['strikes']:
-			#print()
-			if i['strikePrice'] in strikelvl:
-				print(nextlvl[str(i['strikePrice'])])
-				if i['CE']==None:
-					i['CE']={'oi':0
-					,'oic':0
-					}
-
-
-				if (i['PE'])==None:
-					i['PE']={'oi':0
-					,'oic':0
-					}
-				nextlvl[str(i['strikePrice'])]={'CE': (nextlvl[str(i['strikePrice'])]['CE']+i['CE']['oi']),
-				'PE':(nextlvl[str(i['strikePrice'])]['PE']+i['PE']['oi']),
-				'CE_change':(nextlvl[str(i['strikePrice'])]['CE_change']+i['CE']['oic']),'PE_change':(nextlvl[str(i['strikePrice'])]['PE_change']+i['PE']['oic'])}
+		k=chaindata(symbol,expiry)
+		#print(expiry)
+		if k.status_code==200:
+			#print(k)
+			k=k.json()
+			#print(k)
+			for i in k['strikeDataModel']['strikes']:
+				#print()
+				if i['strikePrice'] in strikelvl:
+					#print(i['strikePrice'])
+					#print(nextlvl[str(i['strikePrice'])])
+					#print(i)
+					if str(i['strikePrice']) in list(nextlvl.keys()):
+						if i['CE']==None:
+							i['CE']={'oi':0
+							,'oic':0
+							}
 
 
+						if (i['PE'])==None:
+							i['PE']={'oi':0
+							,'oic':0
+							}
+						nextlvl[str(i['strikePrice'])]={'CE': (nextlvl[str(i['strikePrice'])]['CE']+i['CE']['oi']),
+						'PE':(nextlvl[str(i['strikePrice'])]['PE']+i['PE']['oi']),
+						'CE_change':(nextlvl[str(i['strikePrice'])]['CE_change']+i['CE']['oic']),'PE_change':(nextlvl[str(i['strikePrice'])]['PE_change']+i['PE']['oic'])}
+		return nextlvl
 
 
+
+st_autorefresh(interval=45*1000, key="dataframerefresh")
 
 st.sidebar.title("Fibo Level Maker")
 #st.markdown("This application is a Share Price dashboard for Top 5 Gainers and Losers:")
@@ -187,19 +326,41 @@ select=1
 #st.json(response.json())
 
 
-print(pd.DataFrame(nextlvl).T)
-st.bar_chart(pd.DataFrame(nextlvl).T)
 
 
 import plotly.express as px 
 
 
-fig=px.bar(pd.DataFrame(nextlvl).T, orientation='h' ,text_auto=True,barmode='group')
+niftyoi = st.sidebar.checkbox('Nifty OI')
+bankniftyoi = st.sidebar.checkbox('BankNifty OI')
+usdinroi = st.sidebar.checkbox('USDINR OI')
+if niftyoi:
+	nextlvl=totaloi_bnf('Nifty')
+	print(pd.DataFrame(nextlvl).T)
+	st.bar_chart(pd.DataFrame(nextlvl).T)
+
+	fig=px.bar(pd.DataFrame(nextlvl).T, orientation='h' ,text_auto=True,barmode='group')
 
 
-st.write(fig)
+	st.write(fig)
+if bankniftyoi:
+	nextlvl=totaloi_bnf('BankNifty')
+	print(pd.DataFrame(nextlvl).T)
+	st.bar_chart(pd.DataFrame(nextlvl).T)
+
+	fig=px.bar(pd.DataFrame(nextlvl).T, orientation='h' ,text_auto=True,barmode='group')
 
 
+	st.write(fig)
+if usdinroi:
+	nextlvl=usdinr(m)
+	print(pd.DataFrame(nextlvl).T)
+	st.bar_chart(pd.DataFrame(nextlvl).T)
+
+	fig=px.bar(pd.DataFrame(nextlvl).T, orientation='h' ,text_auto=True,barmode='group')
+
+
+	st.write(fig)
 currentfibo = st.sidebar.checkbox('Todays')
 currentfiboweek = st.sidebar.checkbox('Weeks')
 varcurrentfiboweek = st.sidebar.checkbox('Custom Weeks')
