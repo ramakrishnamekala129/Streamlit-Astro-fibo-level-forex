@@ -242,7 +242,7 @@ def chaindata(symbol,expiry):
 def totaloi_bnf(symbol):
 	global m
 	r=expirybnf(symbol)
-	k=(optionchainbnf(symbol,r[2]))#.json()
+	k=(optionchainbnf(symbol,r[0]))#.json()
 	indexltp=k['srIndexQuote']['openValue']
 	mod=int(indexltp)%50
 	if mod <25:
