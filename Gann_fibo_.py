@@ -326,7 +326,73 @@ select=1
 #st.json(response.json())
 
 
+from snapi_py_client.snapi_bridge import StocknoteAPIPythonBridge
+import json
+samco=StocknoteAPIPythonBridge()
 
+login=json.loads(samco.login(body={"userId":'DJ34777','password':'abcd@1234','yob':'1980'}))
+print("Login details",login)
+print(type(login))
+
+
+
+
+session = login['sessionToken']
+samco.set_session_token(sessionToken=session)
+
+import pandas as pd
+
+df=pd.DataFrame((json.loads(samco.get_option_chain(search_symbol_name='banknifty',exchange=samco.EXCHANGE_NFO))['optionChainDetails']))
+df=df.iloc[:,3:14]
+(df)
+df=df[['strikePrice','optionType','openInterest','openInterestChange','volume','expiryDate']]
+
+
+j=df[df['optionType']=='CE']
+
+t=j.groupby('expiryDate')
+totaloice={}
+for i in t:
+    totaloice[i[0]]=(i[1].to_dict('records'))
+
+j=df[df['optionType']=='PE']
+
+t=j.groupby('expiryDate')
+totaloipe={}
+for i in t:
+    totaloipe[i[0]]=(i[1].to_dict('records'))
+
+
+totalstrike={}
+for i in totaloice:
+    for j in totaloice[i]:
+        totalstrike[str(int(float(j['strikePrice'])))]={
+            'CE':0,'CE_chng':0,
+            'PE':0,'PE_chng':0,
+            'CE_vol':0,
+            'PE_vol':0
+            
+            }
+    break
+
+
+for i in totaloice:
+    for j in totaloice[i]:
+        #print(j)
+        if str(int(float(j['strikePrice']))) in totalstrike.keys():
+            totalstrike[str(int(float(j['strikePrice'])))]['CE']=int(totalstrike[str(int(float(j['strikePrice'])))]['CE'])+int(j['openInterest'])
+            totalstrike[str(int(float(j['strikePrice'])))]['CE_chng']=int(totalstrike[str(int(float(j['strikePrice'])))]['CE_chng'])+int(j['openInterestChange'])
+            totalstrike[str(int(float(j['strikePrice'])))]['CE_vol']=int(totalstrike[str(int(float(j['strikePrice'])))]['CE'])+int(j['volume'])
+            
+for i in totaloipe:
+    for j in totaloipe[i]:
+        #print(j)
+        if str(int(float(j['strikePrice']))) in totalstrike.keys():
+            totalstrike[str(int(float(j['strikePrice'])))]['PE']=int(totalstrike[str(int(float(j['strikePrice'])))]['PE'])+int(j['openInterest'])
+            totalstrike[str(int(float(j['strikePrice'])))]['PE_chng']=int(totalstrike[str(int(float(j['strikePrice'])))]['PE_chng'])+int(j['openInterestChange'])
+            totalstrike[str(int(float(j['strikePrice'])))]['PE_vol']=int(totalstrike[str(int(float(j['strikePrice'])))]['PE'])+int(j['volume'])
+import pandas as pd
+da=pd.DataFrame(totalstrike).T
 
 import plotly.express as px 
 
@@ -334,6 +400,7 @@ import plotly.express as px
 niftyoi = st.sidebar.checkbox('Nifty OI')
 bankniftyoi = st.sidebar.checkbox('BankNifty OI')
 usdinroi = st.sidebar.checkbox('USDINR OI')
+sbankniftyoi = st.sidebar.checkbox('S BankNifty OI')
 if niftyoi:
 	nextlvl=totaloi_bnf('Nifty')
 	print(pd.DataFrame(nextlvl).T)
@@ -358,6 +425,13 @@ if usdinroi:
 	st.bar_chart(pd.DataFrame(nextlvl).T)
 
 	fig=px.bar(pd.DataFrame(nextlvl).T, orientation='h' ,text_auto=True,barmode='group')
+
+
+	st.write(fig)
+if sbankniftyoi:
+	st.bar_chart(da)
+
+	fig=px.bar(da, orientation='h' ,text_auto=True,barmode='group')
 
 
 	st.write(fig)
