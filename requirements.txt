@@ -6,3 +6,4 @@ yfinance
 investiny==0.7.2
 plotly
 streamlit-autorefresh
+stocknotebridge
